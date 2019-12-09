@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Weather</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- Don't forget to link to jQuery -->
+<style>
+	input{
+		margin: 10px 0px;
+		padding: 5px;
+	}
+	#forecast{
+		text-align: center;
+		display: none;
+	}
+	#forecast div{
+		width: 25vw;
+		border: 8px solid blue;
+		margin: 0 auto;
+		background: black;
+	}
+	img{
+		width:100%;
+	}
+</style>
+<script>
+    function gettingJSON(){
+			var OpenWeatherAPI = "0c2481c5bbc8fae4f42b719d53c21f27";
+			var city = "Ann+Arbor";
+			var location = $("#location");
+			var fahrenheit = $("#fahrenheit");
+			var celcius = $("#celcius");
+
+			if(location.val().length !== 0){
+				var city = location.val();
+			}
+			if (fahrenheit.is(":checked")){
+				var unit = "imperial";
+			}
+			if (celcius.is(":checked")){
+				var unit = "metric";
+			}
+			else {
+				var unit = "imperial";
+			}
+
+		let query = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=" + OpenWeatherAPI + "&units=" + unit;
+
+        $.getJSON(query,function(json){
+						$("#loc").html(json.name);
+						$("#temp").html(json["main"].temp);
+						$("#high").html(json["main"].temp_max);
+						$("#low").html(json["main"].temp_min);
+						$("#tempImg").attr('src', "http://openweathermap.org/img/wn/" + json.weather[0]['icon']+ '@2x.png');
+						$("#forecast").css("display", "block");
+    })
+    }
+    </script>
+</head>
+<body>
+	<!-- DO NOT CHANGE ANY CODE IN THE BODY OF THIS FILE. -->
+	<label for ="location">City:</label><input type = "text" id = "location"><br>
+	<input type = "radio" name = "temp" value = "imperial" id = "fahrenheit"> <label for = "fahrenheit">Fahrenheit</label><br>
+	<input type = "radio" name = "temp" value = "metric" id = "celcius"> <label for = "celcius">Celcius</label><br>
+
+	<button id = "getIt" onclick = " gettingJSON()">Get Weather</button>
+
+
+	<div id = "forecast">
+		<div>
+		<img id = "tempImg" src="" alt = "" title = "">
+		</div>
+		<p>The temperature in <span id = "loc"></span> is currently <span id = "temp"></span>.</p>
+		<p>The high today will be <span id = "high"></span> and the low will be <span id = "low"></span>.</p>
+
+	</div>
+</body>
+</html>
